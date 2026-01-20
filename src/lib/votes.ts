@@ -17,7 +17,7 @@ export async function canUserVote(fingerprint: string, showId: number): Promise<
   return !existingVote
 }
 
-export async function submitVote(showId: number, seasonNo: number, episodeNo: number, fingerprint: string) {
+export async function submitVote(showId: number, seasonNo: number, episodeNo: number, fingerprint: string, tag?: string) {
   const existingVote = await prisma.votes.findFirst({
     where: {
       show_id: showId,
@@ -31,6 +31,7 @@ export async function submitVote(showId: number, seasonNo: number, episodeNo: nu
       data: {
         season_no: seasonNo,
         episode_no: episodeNo,
+        tag: tag || null,
         created_at: new Date()
       }
     })
@@ -42,7 +43,7 @@ export async function submitVote(showId: number, seasonNo: number, episodeNo: nu
       season_no: seasonNo,
       episode_no: episodeNo,
       tag: tag || null,
-      fingerprint: uniqueFingerprint
+      fingerprint: fingerprint
     }
   })
 }
