@@ -66,7 +66,7 @@ export default function SearchBar({ variant = 'hero' }: SearchBarProps) {
       ref={containerRef} 
       className={cn(
         "relative w-full",
-        isHeader ? "max-w-md" : "max-w-2xl mx-auto"
+        isHeader ? "max-w-full md:max-w-md" : "max-w-2xl mx-auto"
       )}
     >
       <div className="relative flex items-center">

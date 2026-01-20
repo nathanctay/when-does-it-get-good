@@ -1,43 +1,68 @@
-# Astro Starter Kit: Minimal
+# When Does It Get Good? (WDIGG)
 
-```sh
-bun create astro@latest -- --template minimal
-```
+A lightweight, crowdsourced utility site for television audiences to find the exact moment a series becomes essential viewing.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🚀 Features
 
-## 🚀 Project Structure
+- **Consensus Metrics:** See exactly which episode a show "gets good" at.
+- **Vote Distribution:** Visual charts showing the community spread.
+- **Sentiment Tags:** Track if the show is actually "Worth the wait".
+- **Frictionless Voting:** No accounts required; cast your vote in seconds.
+- **Web 2.0 Aesthetic:** A clean, functional, data-first interface.
+- **Global Search:** Find any TV show via the TMDB-powered autocomplete.
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🛠️ Tech Stack
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- **Framework:** [Astro 5](https://astro.build/) (SSR Mode)
+- **Runtime:** [Bun](https://bun.sh/)
+- **UI:** [React 19](https://react.dev/) & [Tailwind CSS](https://tailwindcss.com/)
+- **Database:** [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/)
+- **Charts:** [Recharts](https://recharts.org/)
+- **API:** [TMDB API](https://www.themoviedb.org/documentation/api)
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 📦 Installation
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+1. **Clone and Install:**
+   ```bash
+   bun install
+   ```
 
-Any static assets, like images, can be placed in the `public/` directory.
+2. **Environment Variables:**
+   Create a `.env` file based on `.env.example`:
+   ```bash
+   DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
+   TMDB_API_KEY="your_api_key_here"
+   PORT=4321
+   ```
 
-## 🧞 Commands
+3. **Database Setup:**
+   ```bash
+   bun x prisma generate
+   # Ensure your database matches the schema
+   bun x prisma db push
+   ```
 
-All commands are run from the root of the project, from a terminal:
+4. **Development:**
+   ```bash
+   bun dev
+   ```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
+## 🚢 Deployment (Oracle Cloud / Ubuntu)
 
-## 👀 Want to learn more?
+1. **Build for production:**
+   ```bash
+   bun run build
+   ```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+2. **Start with PM2:**
+   ```bash
+   # Using the standalone Node entry point with Bun
+   pm2 start "bun ./dist/server/entry.mjs" --name "get-good"
+   ```
+
+3. **Nginx Configuration:**
+   Set up a reverse proxy to `http://localhost:4321`.
+
+## 📄 License
+
+Data provided by [TMDB](https://www.themoviedb.org/). This project is for personal and community use.
