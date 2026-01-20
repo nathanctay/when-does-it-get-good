@@ -1,5 +1,23 @@
 ---
+// --- SERVER SIDE (Runs in Bun) ---
+import { prisma } from '../lib/prisma';
 
+let message = "Loading...";
+let count = 0;
+let error = null;
+
+try {
+  // 1. Try to connect to the DB via Prisma
+  // We use count() just to ping the table
+  count = await prisma.shows.count();
+  message = "Database Connected Successfully!";
+  
+  console.log("✅ Server: DB Connection successful.");
+} catch (e) {
+  console.error("❌ Server: DB Connection failed:", e);
+  error = e instanceof Error ? e.message : "Unknown error";
+  message = "Database Connection Failed.";
+}
 ---
 
 <html lang="en">
@@ -7,10 +25,29 @@
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>When Does It Get Good?</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body style="font-family: system-ui, sans-serif; padding: 2rem;">
+		<h1>When Does It Get Good?</h1>
+		
+		<div style={{ 
+            padding: '1rem', 
+            borderRadius: '8px', 
+            backgroundColor: error ? '#fee2e2' : '#dcfce7',
+            color: error ? '#991b1b' : '#166534',
+            border: `1px solid ${error ? '#b91c1c' : '#15803d'}`
+        }}>
+            <h2>Status: {message}</h2>
+            
+            {error ? (
+                <p><strong>Error:</strong> {error}</p>
+            ) : (
+                <p>There are currently <strong>{count}</strong> shows in the database.</p>
+            )}
+		</div>
+
+        <p style="margin-top: 1rem; color: #666;">
+            If you see "0 shows" and a green box, your SSH tunnel and DB are working perfect.
+        </p>
 	</body>
 </html>
