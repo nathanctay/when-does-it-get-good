@@ -76,6 +76,13 @@ The application focuses on speed, anonymity, and a functional "Web 2.0" aestheti
 * `fingerprint`: String (VarChar 64) - Hash of (IP + User Agent)
 * `created_at`: DateTime (Timestamp)
 
+**Model: `feedback`**
+* `id`: Int (PK)
+* `email`: String (VarChar 255)
+* `subject`: String (VarChar 255, nullable)
+* `message`: String (Text)
+* `created_at`: DateTime (Timestamp)
+
 ---
 
 ## 5. User Flow

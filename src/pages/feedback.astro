@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import FeedbackForm from '../components/FeedbackForm'
+---
+
+<BaseLayout title="Feedback">
+	<div class="max-w-2xl mx-auto py-8">
+		<div class="bg-white border border-slate-300 overflow-hidden">
+			<div class="bg-slate-50 border-b border-slate-300 px-6 py-3">
+				<h1 class="text-sm font-black text-slate-700 uppercase tracking-[0.2em]">Feedback & Support</h1>
+			</div>
+			
+			<div class="p-8 md:p-12">
+				<p class="text-slate-600 mb-8 font-medium leading-relaxed">
+					Have a suggestion? Found a bug? Or just want to say hi? Use the form below to get in touch. We read every message!
+				</p>
+
+				<FeedbackForm client:load />
+			</div>
+		</div>
+
+		<div class="mt-8 text-center">
+			<p class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
+				Your privacy is important to us. <br/>
+				We only use your email to respond to your feedback if necessary.
+			</p>
+		</div>
+	</div>
+</BaseLayout>
