@@ -1,9 +1,62 @@
-<body>
-  <h1>My Astro Site</h1>
-  <h1>About Me</h1>
-  <h2>... and my new Astro site!</h2>
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+---
 
-  <p>I am working through Astro's introductory tutorial. This is the second page on my website, and it's the first one I built myself!</p>
+<BaseLayout title="About the Project">
+	<div class="max-w-4xl mx-auto py-8">
+		<div class="bg-white border border-slate-300 overflow-hidden">
+			<div class="bg-slate-50 border-b border-slate-300 px-6 py-3">
+				<h1 class="text-sm font-black text-slate-700 uppercase tracking-[0.2em]">About the Project</h1>
+			</div>
+			
+			<div class="p-8 md:p-12 space-y-12">
+				<section>
+					<h2 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">The "Three Episode Rule" is Broken</h2>
+					<p class="text-slate-600 leading-relaxed font-medium">
+						We've all been there. You start a show everyone says is "the best thing ever," but three episodes in, you're bored. You ask your friends, and they say, "Oh, it gets good at Season 2." <br/><br/>
+						In an age of infinite streaming, who has time for a ten-hour preamble?
+					</p>
+				</section>
 
-  <p>This site will update as I complete more of the tutorial, so keep checking back and see how my journey is going!</p>
-</body>
+				<section class="grid grid-cols-1 md:grid-cols-2 gap-12">
+					<div class="space-y-4">
+						<h3 class="text-lg font-black text-blue-700 uppercase tracking-tight italic">Our Mission</h3>
+						<p class="text-sm text-slate-600 leading-relaxed font-medium">
+							"When Does It Get Good?" (WDIGG) is a crowdsourced utility for television audiences. We solve the dilemma by providing a single, clean data point: <span class="font-black text-slate-900">"Don't quit until Episode X."</span>
+						</p>
+					</div>
+					<div class="space-y-4">
+						<h3 class="text-lg font-black text-blue-700 uppercase tracking-tight italic">How we do it</h3>
+						<p class="text-sm text-slate-600 leading-relaxed font-medium">
+							We aggregate thousands of fan votes to find the exact "click" moment for every series. No complicated ratings, no long reviews. Just the facts.
+						</p>
+					</div>
+				</section>
+
+				<section class="bg-blue-50 border border-blue-100 p-8">
+					<h3 class="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-6 text-center">Technical Strategy</h3>
+					<div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+						<div>
+							<div class="text-xl font-black text-blue-800 mb-1 leading-none">TMDB</div>
+							<div class="text-[9px] font-black text-blue-400 uppercase tracking-widest">Data Provider</div>
+						</div>
+						<div>
+							<div class="text-xl font-black text-blue-800 mb-1 leading-none">ANON</div>
+							<div class="text-[9px] font-black text-blue-400 uppercase tracking-widest">No Accounts</div>
+						</div>
+						<div>
+							<div class="text-xl font-black text-blue-800 mb-1 leading-none">FPRNT</div>
+							<div class="text-[9px] font-black text-blue-400 uppercase tracking-widest">Spam Prevention</div>
+						</div>
+					</div>
+				</section>
+
+				<footer class="pt-8 border-t border-slate-100 text-center">
+					<p class="text-xs text-slate-400 font-bold uppercase tracking-widest">
+						Built for the Golden Age of TV &bull; 2026
+					</p>
+				</footer>
+			</div>
+		</div>
+	</div>
+</BaseLayout>

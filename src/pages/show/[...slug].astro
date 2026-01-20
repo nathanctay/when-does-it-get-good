@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getOrCreateShow } from '../../lib/shows'
+import { getTMDBImageUrl, getShowDetails } from '../../lib/tmdb'
+import { getVoteStats } from '../../lib/votes'
+import VotingWidget from '../../components/VotingWidget'
+import VoteChart from '../../components/VoteChart'
+
+const { slug } = Astro.params
+if (!slug) return Astro.redirect('/')
+
+const tmdbIdMatch = slug.match(/^(\d+)/)
+if (!tmdbIdMatch) return Astro.redirect('/')
+
+const tmdbId = parseInt(tmdbIdMatch[1])
+const show = await getOrCreateShow(tmdbId)
+const tmdbDetails = await getShowDetails(tmdbId)
+
+if (!show || !tmdbDetails) return Astro.redirect('/404')
+
+const stats = await getVoteStats(show.id)
+---
+
+<BaseLayout title={show.title}>
+	<div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+		<!-- Sidebar -->
+		<div class="space-y-6">
+			<div class="bg-white border border-slate-300 p-2 shadow-sm">
+				<img 
+					src={getTMDBImageUrl(show.poster_path, 'w500')} 
+					alt={show.title}
+					class="w-full h-auto border border-slate-200"
+				/>
+			</div>
+			
+			<div class="bg-white border border-slate-300">
+				<div class="bg-slate-50 border-b border-slate-300 px-4 py-2">
+					<h2 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Show Info</h2>
+				</div>
+				<div class="p-4 space-y-4">
+					<h1 class="text-xl font-black text-slate-900 tracking-tight leading-none">{show.title}</h1>
+					<div class="flex flex-wrap gap-1">
+						{tmdbDetails.genres.map(genre => (
+							<span class="px-2 py-0.5 bg-slate-100 text-slate-500 text-[9px] font-black uppercase tracking-wider border border-slate-200">
+								{genre.name}
+							</span>
+						))}
+					</div>
+					<p class="text-xs text-slate-600 leading-relaxed font-medium">
+						{tmdbDetails.overview}
+					</p>
+					<div class="pt-4 border-t border-slate-100 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex flex-col gap-1">
+						<span>Released: {new Date(tmdbDetails.first_air_date).getFullYear()}</span>
+						<span>Seasons: {show.total_seasons}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Main Content -->
+		<div class="lg:col-span-3 space-y-8">
+			<!-- Verdict Card -->
+			<section class="bg-white border border-slate-300 overflow-hidden">
+				<div class="bg-blue-700 text-white px-6 py-3 flex items-center justify-between">
+					<h3 class="text-xs font-black uppercase tracking-[0.2em]">The Community Consensus</h3>
+					<span class="bg-white/20 px-2 py-0.5 text-[10px] font-bold rounded-sm uppercase">Verified Fans</span>
+				</div>
+				<div class="p-8 sm:p-12 text-center md:text-left">
+					{stats ? (
+						<div class="space-y-4">
+							<p class="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Verdict Reached</p>
+							<h2 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+								It gets good at <span class="bg-blue-600 text-white px-2 py-1">S{stats.season} E{stats.episode}</span>
+							</h2>
+							<p class="text-slate-500 text-sm font-bold mt-4">
+								Aggregated from {stats.totalVotes} {stats.totalVotes === 1 ? 'vote' : 'votes'} cast by users.
+							</p>
+
+							{stats.tags && (stats.tags['worth-wait'] > 0 || stats.tags['dont-waste'] > 0) && (
+								<div class="mt-8 flex flex-wrap gap-4 justify-center md:justify-start">
+									{stats.tags['worth-wait'] > 0 && (
+										<div class="flex items-center gap-2">
+											<span class="bg-blue-100 text-blue-700 px-2 py-1 text-[10px] font-black uppercase border border-blue-200">
+												Worth the wait
+											</span>
+											<span class="text-xs font-bold text-slate-400">{Math.round((stats.tags['worth-wait'] / stats.totalVotes) * 100)}%</span>
+										</div>
+									)}
+									{stats.tags['dont-waste'] > 0 && (
+										<div class="flex items-center gap-2">
+											<span class="bg-red-100 text-red-700 px-2 py-1 text-[10px] font-black uppercase border border-red-200">
+												Don't waste time
+											</span>
+											<span class="text-xs font-bold text-slate-400">{Math.round((stats.tags['dont-waste'] / stats.totalVotes) * 100)}%</span>
+										</div>
+									)}
+								</div>
+							)}
+						</div>
+					) : (
+						<div class="space-y-4">
+							<h2 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">No data yet!</h2>
+							<p class="text-slate-500 text-sm font-bold mt-4 max-w-md">
+								Be the first to tell the world when this show finally hits its stride.
+							</p>
+						</div>
+					)}
+				</div>
+			</section>
+
+			<!-- Distribution & Voting Grid -->
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+				<!-- Chart Section -->
+				<section class="bg-white border border-slate-300 flex flex-col">
+					<div class="bg-slate-50 border-b border-slate-300 px-6 py-3">
+						<h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Vote Distribution</h3>
+					</div>
+					<div class="p-6 flex-grow">
+						<VoteChart client:visible stats={stats} />
+					</div>
+				</section>
+
+				<!-- Voting Section -->
+				<section id="vote" class="bg-[#2b5876] text-white border border-[#1e3c50] p-8">
+					<h3 class="text-xl font-black mb-2 tracking-tight">Cast Your Vote</h3>
+					<p class="text-blue-200 text-xs mb-8 font-bold uppercase tracking-wider">
+						When did it "click" for you?
+					</p>
+					<VotingWidget client:load tmdbId={tmdbId} showId={show.id} totalSeasons={show.total_seasons || 1} />
+					<p class="text-[10px] text-blue-300 mt-6 font-medium italic opacity-60">
+						* No account required. One vote per user.
+					</p>
+				</section>
+			</div>
+		</div>
+	</div>
+</BaseLayout>
